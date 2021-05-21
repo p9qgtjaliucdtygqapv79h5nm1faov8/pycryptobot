@@ -79,10 +79,7 @@ elif app.isLive() == 1:
             raise Exception('Insufficient available funds to place sell order: ' + str(account.getBalance(app.getBaseCurrency())) + ' < 0.1 ' + app.getBaseCurrency() + "\nNote: A manual limit order places a hold on available funds.")
  
     elif app.getExchange() == 'coinbasepro':
-        if state.last_action == 'SELL' and account.getBalance(app.getQuoteCurrency()) < 50:
-            raise Exception('Insufficient available funds to place buy order: ' + str(account.getBalance(app.getQuoteCurrency())) + ' < 50 ' + app.getQuoteCurrency() + "\nNote: A manual limit order places a hold on available funds.")
-        elif state.last_action == 'BUY' and account.getBalance(app.getBaseCurrency()) < 0.001:
-            raise Exception('Insufficient available funds to place sell order: ' + str(account.getBalance(app.getBaseCurrency())) + ' < 0.1 ' + app.getBaseCurrency() + "\nNote: A manual limit order places a hold on available funds.")
+        app.checkBalance(account, state.last_action)
 
 def getAction(now: datetime=datetime.today().strftime('%Y-%m-%d %H:%M:%S'), app: PyCryptoBot=None, price: float=0, df: pd.DataFrame=pd.DataFrame(), df_last: pd.DataFrame=pd.DataFrame(), last_action: str='WAIT', debug: bool=False) -> str:
     ema12gtema26co = bool(df_last['ema12gtema26co'].values[0])
